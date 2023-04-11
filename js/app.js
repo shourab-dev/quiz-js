@@ -47,9 +47,10 @@ const setQuestions = (data) => {
                            ${ans}
                         </label>
                     </div>`;
-    let option2 = new DOMParser().parseFromString(option, "text/html");
-  answerBox.appendChild(option2)
+    allAnsArray.push(option)
   });
+
+  answerBox.innerHTML = allAnsArray.join('')
 
   
 };
