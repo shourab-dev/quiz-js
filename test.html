@@ -6,22 +6,41 @@
     <input type="radio" name="quiz" value="h5555555">
     <input type="radio" name="quiz" value="800">
     <button>Submit</button>
+    <button class="reset">Reset</button>
 </form>
 
 <script>
+    count = 60
 
-let form = document.querySelector('form')
-form.addEventListener('submit', (e)=> {
-    e.preventDefault()
-    let input = e.target.querySelector('input[name="quiz"]:checked')
-    localStorage.setItem('score', 1)
-    let num =  parseInt(localStorage.getItem('score'))
-    num += 50;
-    
-    console.log(Math.floor(5 / 2))
-    
-})
+    const starTimer = () => {
+        window.formSubmit = setInterval(() => {
+            count -= 1
+            console.log(count);
 
+        }, 1000)
+    }
+
+
+    let form = document.querySelector('form')
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault()
+
+        console.log("form Submited");
+        return false;
+
+
+    })
+
+
+    document.querySelector('.reset').addEventListener('click', (e) => {
+        e.preventDefault()
+        console.log(count)
+        clearInterval(window.formSubmit)
+        count = 60
+        starTimer()
+       form.$('#test1').trigger('click');
+    })
 
     window.load = function () {
         localStorage.removeItem('score')

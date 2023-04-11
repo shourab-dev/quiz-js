@@ -3,6 +3,8 @@
 const totalQuestions = 2;
 let current = 0;
 let score = 0;
+let timerInSec = 60;
+let currentTime = 60;
 
 // * get user name
 
@@ -15,10 +17,22 @@ const inputNameButton = popUp.querySelector("button");
 let profileImgUrl = `https://api.dicebear.com/6.x/avataaars/svg?eyes=happy&facialHair=beardLight,beardMedium&hairColor=2c1b18&mouth=smile&skinColor=ffdbb4&eyebrows=raisedExcited&top=dreads01,dreads02,shortCurly,shortWaved&radius=50&seed=`;
 let profileImg = document.querySelector(".profileImg img");
 let name = document.querySelector(".userName");
-
+let timer = document.querySelector(".timer h2");
 const updateProfile = (user) => {
   name.innerHTML = user;
   profileImg.src = profileImgUrl + user;
+};
+
+//* START THE TIMER
+const starTimer = (e) => {
+  window.timer = setInterval((e) => {
+    currentTime -= 1;
+    timer.innerHTML = currentTime;
+    if (currentTime == 50) {
+      checkResult(e);
+    }
+    console.log(currentTime);
+  }, 1000);
 };
 
 let userName = "User";
@@ -30,6 +44,9 @@ const getName = (e) => {
   setTimeout(() => {
     popUp.classList.add("hide");
   }, 200);
+
+  //* START THE TIMER
+  starTimer();
 };
 
 inputNameForm.addEventListener("submit", getName);
@@ -80,7 +97,7 @@ const getQuestion = async () => {
   );
 
   let data = await response.json();
-  console.log(data);
+
   setQuestions(data[0]);
 };
 if (current != totalQuestions && current < totalQuestions) {
@@ -106,7 +123,10 @@ const contentArea = document.querySelector(".content");
 //* CHECK ANSWER AND RESET
 const checkResult = (e) => {
   e.preventDefault();
-
+  clearInterval(window.timer);
+  currentTime = 60;
+  timer.innerHTML = currentTime;
+  starTimer();
   if (current < totalQuestions) {
     let userAns = e.target.querySelector('input[name="quiz"]:checked');
     if (current != totalQuestions && current < totalQuestions) {
@@ -122,7 +142,7 @@ const checkResult = (e) => {
 
     if (current < totalQuestions) {
       //* GET NEW QUESTIONS
-      console.log(current);
+
       getQuestion();
     } else {
       current -= current;
@@ -139,8 +159,6 @@ const checkResult = (e) => {
       }
     }
   }
-
-  
 };
 
 form.addEventListener("submit", checkResult);

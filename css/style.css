@@ -152,7 +152,7 @@ input:checked + label {
 .forwardsButton {
   margin-top: 50px;
 }
-.resetGame button,
+.resetGame a,
 .forwardsButton button {
   padding: 20px 50px;
   border: none;
@@ -166,7 +166,7 @@ input:checked + label {
 .resetGame{
   margin-top: 50px;
 }
-.resetGame button,
+.resetGame a,
 .forwardsButton button:hover {
   transform: scale(0.9);
 }
