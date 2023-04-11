@@ -1,3 +1,12 @@
+//* RULES
+
+const totalQuestions = 2;
+let current = 0;
+
+window.addEventListener("load", () => {
+  localStorage.removeItem("score");
+});
+
 // * get user name
 
 const popUp = document.querySelector(".popup");
@@ -18,7 +27,7 @@ const updateProfile = (user) => {
 let userName = "User";
 const getName = (e) => {
   e.preventDefault();
-  userName = inputName.value;
+  userName = inputName.value ? inputName.value : "User";
   updateProfile(userName);
   inputNameButton.innerHTML = `Loading`;
   setTimeout(() => {
@@ -29,12 +38,17 @@ const getName = (e) => {
 inputNameForm.addEventListener("submit", getName);
 
 //* SET QUESTIONS
-
+const currentQuizNumber = document.querySelector(".current");
+const totalQuizNumber = document.querySelector(".totalQuiz");
 const question = document.querySelector(".content .question");
 const answerBox = document.querySelector(".ansBox");
-
+let currentCorrectAnswer = "";
 const setQuestions = (data) => {
+  currentQuizNumber.innerHTML = current;
+  totalQuizNumber.innerHTML = totalQuestions;
   question.innerHTML = data.question;
+  //* set correct ans
+  currentCorrectAnswer = data.correctAnswer;
   let allAns = [...data.incorrectAnswers, data.correctAnswer];
   //* RANDOMIZE ANSWERS
   allAns.sort(() => Math.random() - 0.5);
@@ -47,18 +61,13 @@ const setQuestions = (data) => {
                            ${ans}
                         </label>
                     </div>`;
-    allAnsArray.push(option)
+    allAnsArray.push(option);
   });
 
-  answerBox.innerHTML = allAnsArray.join('')
-
-  
+  answerBox.innerHTML = allAnsArray.join("");
 };
 
 //* GET QUESTIONS
-
-const totalQuestions = 5;
-let current = 1;
 
 let options = {
   method: "GET",
@@ -74,8 +83,73 @@ const getQuestion = async () => {
   );
 
   let data = await response.json();
-    console.log(data);
+  console.log(data);
   setQuestions(data[0]);
 };
+if (current <= totalQuestions) {
+  getQuestion();
+}
 
-getQuestion();
+//* UPDATE PROGRESS
+
+const progressCnt = document.querySelector(".progressCnt");
+
+const updateProgress = (current, totalLength) => {
+  let percentage = (100 / totalLength) * current;
+  progressCnt.style.width = `${percentage}%`;
+  currentQuizNumber.innerHTML = current;
+  totalQuizNumber.innerHTML = totalLength;
+};
+
+//* CHECK ANSWER
+const form = document.querySelector("form.answerForm");
+let totalScore = document.querySelector(".totalScore span");
+const contentArea = document.querySelector(".content");
+//* CHECK ANSWER AND RESET
+const checkResult = (e) => {
+  e.preventDefault();
+
+  if (current != totalQuestions && current < totalQuestions) {
+    let userAns = e.target.querySelector('input[name="quiz"]:checked');
+    if (current != totalQuestions && current < totalQuestions) {
+      current += 1;
+    }
+    if (userAns.value == currentCorrectAnswer) {
+      if (localStorage.getItem("score") != null) {
+        let score = parseInt(localStorage.getItem("score"));
+        score += 1;
+        localStorage.setItem("score", score);
+      } else {
+        localStorage.setItem("score", 1);
+      }
+    }
+    //* UPDATE RESULT FOR PROFILE
+    totalScore.innerHTML = localStorage.getItem("score");
+    //*  UPDATE PROGRESSBAR
+    updateProgress(current, totalQuestions);
+
+    //* GET NEW QUESTIONS
+    console.log(current);
+    getQuestion();
+  } else {
+    current -= current;
+    //* SHOW THE RESULT
+    let totalScore = parseInt(localStorage.getItem("score"));
+    let totalScoreAve = Math.floor(
+      parseInt(localStorage.getItem("score")) / totalQuestions
+    );
+    if (totalScore > totalScoreAve) {
+      let reloadGame = ` <div class="resetGame">
+                        <button>Restart Game</button>
+                    </div>`;
+      contentArea.innerHTML = `<h2>Excellent Job. You got ${totalScore} questions right 😀</h2> ${reloadGame}`;
+    } else {
+      contentArea.innerHTML = `<h2>Ohh!!!  You only got ${totalScore} questions right 😓</h2> ${reloadGame}`;
+    }
+  }
+};
+
+form.addEventListener("submit", checkResult);
+
+
+const resetGameBtn = document.querySelector(".resetGame button");

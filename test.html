@@ -1,0 +1,32 @@
+<form>
+    <input type="radio" name="quiz" value="hi">
+    <input type="radio" name="quiz" value="h5">
+    <input type="radio" name="quiz" value="5050">
+    <input type="radio" name="quiz" value="9090">
+    <input type="radio" name="quiz" value="h5555555">
+    <input type="radio" name="quiz" value="800">
+    <button>Submit</button>
+</form>
+
+<script>
+
+let form = document.querySelector('form')
+form.addEventListener('submit', (e)=> {
+    e.preventDefault()
+    let input = e.target.querySelector('input[name="quiz"]:checked')
+    localStorage.setItem('score', 1)
+    let num =  parseInt(localStorage.getItem('score'))
+    num += 50;
+    
+    console.log(Math.floor(5 / 2))
+    
+})
+
+
+    window.load = function () {
+        localStorage.removeItem('score')
+    };
+
+
+
+</script>

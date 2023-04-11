@@ -108,7 +108,7 @@ body {
 
 .progressCnt {
   background: linear-gradient(to right, #a8ff78, #78ffd6);
-  width: 80%;
+  width: 0%;
   height: 100%;
   border-radius: 15px;
 }
@@ -152,7 +152,7 @@ input:checked + label {
 .forwardsButton {
   margin-top: 50px;
 }
-
+.resetGame button,
 .forwardsButton button {
   padding: 20px 50px;
   border: none;
@@ -163,7 +163,7 @@ input:checked + label {
   cursor: pointer;
   transition: 0.35s ease;
 }
-
+.resetGame button,
 .forwardsButton button:hover {
   transform: scale(0.9);
 }
@@ -179,7 +179,7 @@ input:checked + label {
   background-color: #fff;
   z-index: 99;
   background: radial-gradient(#0072ff, #00c6ff);
-  transition: 0.35s ;
+  transition: 0.35s;
 }
 
 .input_box {
