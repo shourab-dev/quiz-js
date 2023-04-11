@@ -163,6 +163,9 @@ input:checked + label {
   cursor: pointer;
   transition: 0.35s ease;
 }
+.resetGame{
+  margin-top: 50px;
+}
 .resetGame button,
 .forwardsButton button:hover {
   transform: scale(0.9);

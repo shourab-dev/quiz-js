@@ -2,10 +2,7 @@
 
 const totalQuestions = 2;
 let current = 0;
-
-window.addEventListener("load", () => {
-  localStorage.removeItem("score");
-});
+let score = 0;
 
 // * get user name
 
@@ -86,7 +83,7 @@ const getQuestion = async () => {
   console.log(data);
   setQuestions(data[0]);
 };
-if (current <= totalQuestions) {
+if (current != totalQuestions && current < totalQuestions) {
   getQuestion();
 }
 
@@ -105,51 +102,45 @@ const updateProgress = (current, totalLength) => {
 const form = document.querySelector("form.answerForm");
 let totalScore = document.querySelector(".totalScore span");
 const contentArea = document.querySelector(".content");
+
 //* CHECK ANSWER AND RESET
 const checkResult = (e) => {
   e.preventDefault();
 
-  if (current != totalQuestions && current < totalQuestions) {
+  if (current < totalQuestions) {
     let userAns = e.target.querySelector('input[name="quiz"]:checked');
     if (current != totalQuestions && current < totalQuestions) {
       current += 1;
     }
     if (userAns.value == currentCorrectAnswer) {
-      if (localStorage.getItem("score") != null) {
-        let score = parseInt(localStorage.getItem("score"));
-        score += 1;
-        localStorage.setItem("score", score);
-      } else {
-        localStorage.setItem("score", 1);
-      }
+      score += 1;
     }
     //* UPDATE RESULT FOR PROFILE
-    totalScore.innerHTML = localStorage.getItem("score");
+    totalScore.innerHTML = score;
     //*  UPDATE PROGRESSBAR
     updateProgress(current, totalQuestions);
 
-    //* GET NEW QUESTIONS
-    console.log(current);
-    getQuestion();
-  } else {
-    current -= current;
-    //* SHOW THE RESULT
-    let totalScore = parseInt(localStorage.getItem("score"));
-    let totalScoreAve = Math.floor(
-      parseInt(localStorage.getItem("score")) / totalQuestions
-    );
-    if (totalScore > totalScoreAve) {
-      let reloadGame = ` <div class="resetGame">
-                        <button>Restart Game</button>
-                    </div>`;
-      contentArea.innerHTML = `<h2>Excellent Job. You got ${totalScore} questions right 😀</h2> ${reloadGame}`;
+    if (current < totalQuestions) {
+      //* GET NEW QUESTIONS
+      console.log(current);
+      getQuestion();
     } else {
-      contentArea.innerHTML = `<h2>Ohh!!!  You only got ${totalScore} questions right 😓</h2> ${reloadGame}`;
+      current -= current;
+      //* SHOW THE RESULT
+      let totalScore = score;
+      let totalScoreAve = Math.floor(score / totalQuestions);
+      let reloadGame = ` <div class="resetGame">
+                        <a href="#" onClick=" window.location.reload(); ">Restart Game</a>
+                    </div>`;
+      if (totalScore > totalScoreAve) {
+        contentArea.innerHTML = `<h2>Excellent Job. You got ${totalScore} questions right 😀</h2> ${reloadGame}`;
+      } else {
+        contentArea.innerHTML = `<h2>Ohh!!!  You only got ${totalScore} questions right 😓</h2> ${reloadGame}`;
+      }
     }
   }
+
+  
 };
 
 form.addEventListener("submit", checkResult);
-
-
-const resetGameBtn = document.querySelector(".resetGame button");
