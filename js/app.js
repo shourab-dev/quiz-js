@@ -7,7 +7,7 @@ let timerInSec = 60;
 let currentTime = 60;
 
 // * get user name
-
+const form = document.querySelector("form.answerForm");
 const popUp = document.querySelector(".popup");
 const inputName = popUp.querySelector("input");
 const inputNameForm = popUp.querySelector("form");
@@ -28,8 +28,8 @@ const starTimer = (e) => {
   window.timer = setInterval((e) => {
     currentTime -= 1;
     timer.innerHTML = currentTime;
-    if (currentTime == 50) {
-      checkResult(e);
+    if (currentTime == 0) {
+      form.dispatchEvent(new Event("submit"));
     }
     console.log(currentTime);
   }, 1000);
@@ -116,7 +116,6 @@ const updateProgress = (current, totalLength) => {
 };
 
 //* CHECK ANSWER
-const form = document.querySelector("form.answerForm");
 let totalScore = document.querySelector(".totalScore span");
 const contentArea = document.querySelector(".content");
 
@@ -132,8 +131,10 @@ const checkResult = (e) => {
     if (current != totalQuestions && current < totalQuestions) {
       current += 1;
     }
-    if (userAns.value == currentCorrectAnswer) {
-      score += 1;
+    if (userAns != null) {
+      if (userAns.value == currentCorrectAnswer) {
+        score += 1;
+      }
     }
     //* UPDATE RESULT FOR PROFILE
     totalScore.innerHTML = score;

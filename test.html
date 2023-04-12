@@ -6,45 +6,35 @@
     <input type="radio" name="quiz" value="h5555555">
     <input type="radio" name="quiz" value="800">
     <button>Submit</button>
-    <button class="reset">Reset</button>
 </form>
+<button class="reset">Reset</button>
 
 <script>
-    count = 60
 
-    const starTimer = () => {
-        window.formSubmit = setInterval(() => {
-            count -= 1
-            console.log(count);
+    let form = document.querySelector('forms')
 
-        }, 1000)
+    const submitForm = (e) => {
+        e.preventDefault()
+        console.log('form submited', e.target);
+        
+    }
+    if(form != null){
+
+        form.addEventListener('submit', submitForm)
     }
 
+    let resetBtn = document.querySelector('button.reset')
 
-    let form = document.querySelector('form')
+    const testFunction = (e) => {
+        setInterval(()=> {
+           form.dispatchEvent(new Event('submit'));
+        },1000)
 
-    form.addEventListener('submit', (e) => {
-        e.preventDefault()
+    }
 
-        console.log("form Submited");
-        return false;
-
-
-    })
+    resetBtn.addEventListener('click', testFunction)
 
 
-    document.querySelector('.reset').addEventListener('click', (e) => {
-        e.preventDefault()
-        console.log(count)
-        clearInterval(window.formSubmit)
-        count = 60
-        starTimer()
-       form.$('#test1').trigger('click');
-    })
-
-    window.load = function () {
-        localStorage.removeItem('score')
-    };
 
 
 
