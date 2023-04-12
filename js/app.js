@@ -146,6 +146,7 @@ const checkResult = (e) => {
 
       getQuestion();
     } else {
+      clearInterval(window.timer);
       current -= current;
       //* SHOW THE RESULT
       let totalScore = score;
